@@ -15,7 +15,7 @@ const Register = () => {
     name: '',
     email: '',
     phone: '',
-    role: '' as 'farmer' | 'consumer' | '',
+    role: 'farmer' as 'farmer' | 'consumer',
     district: '',
     upazila: '',
     union: ''
@@ -35,6 +35,18 @@ const Register = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // Validate that all required fields are filled
+    if (!formData.name || !formData.email || !formData.phone || !formData.role || 
+        !formData.district || !formData.upazila || !formData.union) {
+      toast({
+        title: "Missing Information",
+        description: "Please fill in all required fields.",
+        variant: "destructive",
+      });
+      return;
+    }
+
     setIsLoading(true);
 
     try {
