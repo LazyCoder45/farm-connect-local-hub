@@ -1,3 +1,4 @@
+
 import type { Config } from "tailwindcss";
 
 export default {
@@ -61,6 +62,43 @@ export default {
 					'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
+				},
+				// Agricultural theme colors
+				farm: {
+					50: '#f8fdf4',
+					100: '#f0fae3',
+					200: '#dff4c8',
+					300: '#c8ea9e',
+					400: '#a7d96a',
+					500: '#7eb83a',
+					600: '#5a8f23',
+					700: '#446920',
+					800: '#37541e',
+					900: '#2f461e',
+				},
+				earth: {
+					50: '#faf6f1',
+					100: '#f4ebe0',
+					200: '#e7d4bf',
+					300: '#d6b794',
+					400: '#c49568',
+					500: '#b87d4b',
+					600: '#a96d3f',
+					700: '#8d5a36',
+					800: '#734a31',
+					900: '#5e3e2b',
+				},
+				harvest: {
+					50: '#fefce8',
+					100: '#fef9c3',
+					200: '#fef08a',
+					300: '#fde047',
+					400: '#facc15',
+					500: '#eab308',
+					600: '#ca8a04',
+					700: '#a16207',
+					800: '#854d0e',
+					900: '#713f12',
 				}
 			},
 			borderRadius: {
@@ -84,11 +122,22 @@ export default {
 					to: {
 						height: '0'
 					}
+				},
+				'fade-in': {
+					'0%': {
+						opacity: '0',
+						transform: 'translateY(10px)'
+					},
+					'100%': {
+						opacity: '1',
+						transform: 'translateY(0)'
+					}
 				}
 			},
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
-				'accordion-up': 'accordion-up 0.2s ease-out'
+				'accordion-up': 'accordion-up 0.2s ease-out',
+				'fade-in': 'fade-in 0.3s ease-out'
 			}
 		}
 	},
