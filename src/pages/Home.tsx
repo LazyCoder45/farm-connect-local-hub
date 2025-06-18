@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -7,7 +6,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { Sprout, Users, MapPin, TrendingUp, Star, ArrowRight } from 'lucide-react';
 
 const Home = () => {
-  const { isAuthenticated, user } = useAuth();
+  const { isAuthenticated, profile } = useAuth();
 
   const features = [
     {
@@ -75,9 +74,9 @@ const Home = () => {
           ) : (
             <div className="space-y-4">
               <h2 className="text-2xl font-semibold text-farm-800">
-                Welcome back, {user?.name}!
+                Welcome back, {profile?.name || 'User'}!
               </h2>
-              {user?.role === 'farmer' ? (
+              {profile?.role === 'farmer' ? (
                 <Button size="lg" asChild className="bg-farm-600 hover:bg-farm-700">
                   <Link to="/post-crop">
                     Post Your Next Crop

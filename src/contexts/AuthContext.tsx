@@ -69,8 +69,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
               
               if (error) {
                 console.error('Error fetching profile:', error);
-              } else {
-                setProfile(profileData);
+              } else if (profileData) {
+                // Type assertion to ensure role is properly typed
+                const typedProfile: Profile = {
+                  ...profileData,
+                  role: profileData.role as 'farmer' | 'consumer'
+                };
+                setProfile(typedProfile);
               }
             } catch (error) {
               console.error('Profile fetch error:', error);
@@ -200,7 +205,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
       if (error) throw error;
 
-      setProfile(data);
+      if (data) {
+        const typedProfile: Profile = {
+          ...data,
+          role: data.role as 'farmer' | 'consumer'
+        };
+        setProfile(typedProfile);
+      }
+      
       toast({
         title: "Profile Updated",
         description: "Your profile has been successfully updated.",
