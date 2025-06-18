@@ -2,101 +2,87 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { useAuth } from '@/contexts/AuthContext';
-import { Sprout, User, LogOut, Plus, Truck } from 'lucide-react';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
+import { Sprout, User, LogOut, Settings } from 'lucide-react';
 
 const Header = () => {
-  const { user, logout, isAuthenticated } = useAuth();
+  const { isAuthenticated, profile, logout } = useAuth();
   const navigate = useNavigate();
 
-  const handleLogout = () => {
-    logout();
+  const handleLogout = async () => {
+    await logout();
     navigate('/');
   };
 
   return (
-    <header className="bg-white border-b border-farm-200 sticky top-0 z-50">
-      <div className="container mx-auto px-4 py-3">
-        <div className="flex items-center justify-between">
+    <header className="bg-white shadow-sm border-b">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex justify-between items-center h-16">
+          {/* Logo */}
           <Link to="/" className="flex items-center space-x-2">
             <Sprout className="h-8 w-8 text-farm-600" />
-            <span className="text-2xl font-bold text-farm-700">FarmConnect</span>
+            <span className="text-xl font-bold text-farm-800">FarmConnect</span>
           </Link>
 
-          <nav className="hidden md:flex items-center space-x-6">
-            <Link to="/crops" className="text-farm-600 hover:text-farm-800 font-medium">
-              Browse Crops
+          {/* Navigation */}
+          <nav className="hidden md:flex items-center space-x-8">
+            <Link to="/crops" className="text-gray-700 hover:text-farm-600 font-medium">
+              Crops
             </Link>
-            <Link to="/transport" className="text-farm-600 hover:text-farm-800 font-medium">
+            <Link to="/transport" className="text-gray-700 hover:text-farm-600 font-medium">
               Transport
             </Link>
-            {user?.role === 'farmer' && (
-              <Link to="/post-crop" className="text-farm-600 hover:text-farm-800 font-medium">
-                Post Crop
-              </Link>
-            )}
           </nav>
 
+          {/* Auth Section */}
           <div className="flex items-center space-x-4">
             {isAuthenticated ? (
-              <>
-                {user?.role === 'farmer' && (
-                  <Button asChild className="bg-farm-600 hover:bg-farm-700">
-                    <Link to="/post-crop">
-                      <Plus className="h-4 w-4 mr-2" />
-                      Post Crop
-                    </Link>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" className="relative h-8 w-8 rounded-full">
+                    <Avatar className="h-8 w-8">
+                      <AvatarImage src={profile?.profile_image} alt={profile?.name} />
+                      <AvatarFallback>
+                        {profile?.name?.charAt(0).toUpperCase() || 'U'}
+                      </AvatarFallback>
+                    </Avatar>
                   </Button>
-                )}
-                
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button variant="ghost" className="flex items-center space-x-2">
-                      <User className="h-4 w-4" />
-                      <span>{user?.name}</span>
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end" className="w-48">
-                    <DropdownMenuItem asChild>
-                      <Link to="/profile" className="flex items-center">
-                        <User className="h-4 w-4 mr-2" />
-                        Profile
-                      </Link>
-                    </DropdownMenuItem>
-                    {user?.role === 'farmer' && (
-                      <DropdownMenuItem asChild>
-                        <Link to="/my-crops" className="flex items-center">
-                          <Sprout className="h-4 w-4 mr-2" />
-                          My Crops
-                        </Link>
-                      </DropdownMenuItem>
-                    )}
-                    <DropdownMenuItem asChild>
-                      <Link to="/orders" className="flex items-center">
-                        <Truck className="h-4 w-4 mr-2" />
-                        Orders
-                      </Link>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem onClick={handleLogout}>
-                      <LogOut className="h-4 w-4 mr-2" />
-                      Logout
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              </>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="w-56" align="end" forceMount>
+                  <div className="flex items-center justify-start gap-2 p-2">
+                    <div className="flex flex-col space-y-1 leading-none">
+                      <p className="font-medium">{profile?.name}</p>
+                      <p className="w-[200px] truncate text-sm text-muted-foreground">
+                        {profile?.email}
+                      </p>
+                      <p className="text-xs text-muted-foreground capitalize">
+                        {profile?.role}
+                      </p>
+                    </div>
+                  </div>
+                  <DropdownMenuItem className="cursor-pointer">
+                    <User className="mr-2 h-4 w-4" />
+                    <span>Profile</span>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem className="cursor-pointer">
+                    <Settings className="mr-2 h-4 w-4" />
+                    <span>Settings</span>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem className="cursor-pointer" onClick={handleLogout}>
+                    <LogOut className="mr-2 h-4 w-4" />
+                    <span>Log out</span>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             ) : (
               <div className="flex items-center space-x-2">
-                <Button variant="outline" asChild>
-                  <Link to="/login">Login</Link>
+                <Button variant="ghost" asChild>
+                  <Link to="/login">Sign In</Link>
                 </Button>
                 <Button asChild className="bg-farm-600 hover:bg-farm-700">
-                  <Link to="/register">Register</Link>
+                  <Link to="/register">Get Started</Link>
                 </Button>
               </div>
             )}

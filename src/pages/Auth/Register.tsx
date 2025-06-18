@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -7,13 +7,13 @@ import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useAuth } from '@/contexts/AuthContext';
-import { useToast } from '@/hooks/use-toast';
 import { Sprout } from 'lucide-react';
 
 const Register = () => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
+    password: '',
     phone: '',
     role: 'farmer' as 'farmer' | 'consumer',
     district: '',
@@ -21,13 +21,19 @@ const Register = () => {
     union: ''
   });
   const [isLoading, setIsLoading] = useState(false);
-  const { register } = useAuth();
-  const { toast } = useToast();
+  const { register, isAuthenticated } = useAuth();
   const navigate = useNavigate();
 
   const districts = ['Dhaka', 'Chittagong', 'Rajshahi', 'Khulna', 'Barisal', 'Sylhet', 'Rangpur', 'Mymensingh'];
   const upazilas = ['Dhanmondi', 'Gulshan', 'Wari', 'Tejgaon', 'Ramna', 'Motijheel'];
   const unions = ['Ward-1', 'Ward-2', 'Ward-3', 'Ward-4', 'Ward-5', 'Ward-6'];
+
+  // Redirect if already authenticated
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate('/');
+    }
+  }, [isAuthenticated, navigate]);
 
   const handleInputChange = (field: string, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }));
@@ -37,13 +43,8 @@ const Register = () => {
     e.preventDefault();
     
     // Validate that all required fields are filled
-    if (!formData.name || !formData.email || !formData.phone || !formData.role || 
-        !formData.district || !formData.upazila || !formData.union) {
-      toast({
-        title: "Missing Information",
-        description: "Please fill in all required fields.",
-        variant: "destructive",
-      });
+    if (!formData.name || !formData.email || !formData.password || !formData.phone || 
+        !formData.role || !formData.district || !formData.upazila || !formData.union) {
       return;
     }
 
@@ -51,17 +52,9 @@ const Register = () => {
 
     try {
       await register(formData);
-      toast({
-        title: "Registration Successful!",
-        description: "Welcome to FarmConnect. You can now start exploring.",
-      });
-      navigate('/');
+      // Don't navigate here - let the auth state change handle it
     } catch (error) {
-      toast({
-        title: "Registration Failed",
-        description: "Please check your information and try again.",
-        variant: "destructive",
-      });
+      // Error handling is done in the AuthContext
     } finally {
       setIsLoading(false);
     }
@@ -100,6 +93,18 @@ const Register = () => {
                 value={formData.email}
                 onChange={(e) => handleInputChange('email', e.target.value)}
                 placeholder="Enter your email"
+                required
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="password">Password</Label>
+              <Input
+                id="password"
+                type="password"
+                value={formData.password}
+                onChange={(e) => handleInputChange('password', e.target.value)}
+                placeholder="Create a password"
                 required
               />
             </div>

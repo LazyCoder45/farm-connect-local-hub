@@ -1,21 +1,26 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { useAuth } from '@/contexts/AuthContext';
-import { useToast } from '@/hooks/use-toast';
 import { Sprout } from 'lucide-react';
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const { login } = useAuth();
-  const { toast } = useToast();
+  const { login, isAuthenticated } = useAuth();
   const navigate = useNavigate();
+
+  // Redirect if already authenticated
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate('/');
+    }
+  }, [isAuthenticated, navigate]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -23,17 +28,9 @@ const Login = () => {
 
     try {
       await login(email, password);
-      toast({
-        title: "Welcome back!",
-        description: "You have been successfully logged in.",
-      });
       navigate('/');
     } catch (error) {
-      toast({
-        title: "Login Failed",
-        description: "Invalid email or password. Please try again.",
-        variant: "destructive",
-      });
+      // Error handling is done in the AuthContext
     } finally {
       setIsLoading(false);
     }
@@ -90,12 +87,6 @@ const Login = () => {
               <Link to="/register" className="text-farm-600 hover:text-farm-700 font-medium">
                 Register here
               </Link>
-            </p>
-          </div>
-          
-          <div className="mt-4 text-center">
-            <p className="text-xs text-muted-foreground">
-              Demo accounts: farmer@test.com or consumer@test.com (any password)
             </p>
           </div>
         </CardContent>

@@ -9,7 +9,341 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      [_ in never]: never
+      comments: {
+        Row: {
+          content: string
+          created_at: string | null
+          crop_id: string
+          id: string
+          user_id: string
+          user_name: string
+        }
+        Insert: {
+          content: string
+          created_at?: string | null
+          crop_id: string
+          id?: string
+          user_id: string
+          user_name: string
+        }
+        Update: {
+          content?: string
+          created_at?: string | null
+          crop_id?: string
+          id?: string
+          user_id?: string
+          user_name?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "comments_crop_id_fkey"
+            columns: ["crop_id"]
+            isOneToOne: false
+            referencedRelation: "crops"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "comments_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      crops: {
+        Row: {
+          category: string
+          created_at: string | null
+          description: string | null
+          district: string
+          expected_sale_date: string
+          farmer_id: string
+          harvest_date: string
+          id: string
+          images: string[] | null
+          is_organic: boolean | null
+          price_per_unit: number
+          quantity: number
+          status: string
+          title: string
+          union: string
+          unit: string
+          upazila: string
+          updated_at: string | null
+          videos: string[] | null
+        }
+        Insert: {
+          category: string
+          created_at?: string | null
+          description?: string | null
+          district: string
+          expected_sale_date: string
+          farmer_id: string
+          harvest_date: string
+          id?: string
+          images?: string[] | null
+          is_organic?: boolean | null
+          price_per_unit: number
+          quantity: number
+          status?: string
+          title: string
+          union: string
+          unit: string
+          upazila: string
+          updated_at?: string | null
+          videos?: string[] | null
+        }
+        Update: {
+          category?: string
+          created_at?: string | null
+          description?: string | null
+          district?: string
+          expected_sale_date?: string
+          farmer_id?: string
+          harvest_date?: string
+          id?: string
+          images?: string[] | null
+          is_organic?: boolean | null
+          price_per_unit?: number
+          quantity?: number
+          status?: string
+          title?: string
+          union?: string
+          unit?: string
+          upazila?: string
+          updated_at?: string | null
+          videos?: string[] | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "crops_farmer_id_fkey"
+            columns: ["farmer_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      orders: {
+        Row: {
+          advance_payment: number
+          consumer_id: string
+          created_at: string | null
+          crop_id: string
+          expected_delivery_date: string | null
+          farmer_id: string
+          id: string
+          order_date: string | null
+          payment_status: string
+          quantity: number
+          remaining_payment: number
+          status: string
+          total_amount: number
+          updated_at: string | null
+        }
+        Insert: {
+          advance_payment: number
+          consumer_id: string
+          created_at?: string | null
+          crop_id: string
+          expected_delivery_date?: string | null
+          farmer_id: string
+          id?: string
+          order_date?: string | null
+          payment_status?: string
+          quantity: number
+          remaining_payment: number
+          status?: string
+          total_amount: number
+          updated_at?: string | null
+        }
+        Update: {
+          advance_payment?: number
+          consumer_id?: string
+          created_at?: string | null
+          crop_id?: string
+          expected_delivery_date?: string | null
+          farmer_id?: string
+          id?: string
+          order_date?: string | null
+          payment_status?: string
+          quantity?: number
+          remaining_payment?: number
+          status?: string
+          total_amount?: number
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "orders_consumer_id_fkey"
+            columns: ["consumer_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "orders_crop_id_fkey"
+            columns: ["crop_id"]
+            isOneToOne: false
+            referencedRelation: "crops"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "orders_farmer_id_fkey"
+            columns: ["farmer_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profiles: {
+        Row: {
+          created_at: string | null
+          district: string
+          email: string
+          id: string
+          is_verified: boolean | null
+          name: string
+          phone: string
+          profile_image: string | null
+          role: string
+          union: string
+          upazila: string
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          district: string
+          email: string
+          id: string
+          is_verified?: boolean | null
+          name: string
+          phone: string
+          profile_image?: string | null
+          role: string
+          union: string
+          upazila: string
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          district?: string
+          email?: string
+          id?: string
+          is_verified?: boolean | null
+          name?: string
+          phone?: string
+          profile_image?: string | null
+          role?: string
+          union?: string
+          upazila?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      ratings: {
+        Row: {
+          comment: string | null
+          created_at: string | null
+          crop_id: string
+          id: string
+          rating: number
+          user_id: string
+          user_name: string
+        }
+        Insert: {
+          comment?: string | null
+          created_at?: string | null
+          crop_id: string
+          id?: string
+          rating: number
+          user_id: string
+          user_name: string
+        }
+        Update: {
+          comment?: string | null
+          created_at?: string | null
+          crop_id?: string
+          id?: string
+          rating?: number
+          user_id?: string
+          user_name?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ratings_crop_id_fkey"
+            columns: ["crop_id"]
+            isOneToOne: false
+            referencedRelation: "crops"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ratings_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      transport_providers: {
+        Row: {
+          available_date: string
+          available_districts: string[] | null
+          capacity: string
+          completed_trips: number | null
+          created_at: string | null
+          id: string
+          is_available: boolean | null
+          price_per_km: number
+          provider_id: string
+          provider_name: string
+          provider_phone: string
+          rating: number | null
+          vehicle_type: string
+        }
+        Insert: {
+          available_date: string
+          available_districts?: string[] | null
+          capacity: string
+          completed_trips?: number | null
+          created_at?: string | null
+          id?: string
+          is_available?: boolean | null
+          price_per_km: number
+          provider_id: string
+          provider_name: string
+          provider_phone: string
+          rating?: number | null
+          vehicle_type: string
+        }
+        Update: {
+          available_date?: string
+          available_districts?: string[] | null
+          capacity?: string
+          completed_trips?: number | null
+          created_at?: string | null
+          id?: string
+          is_available?: boolean | null
+          price_per_km?: number
+          provider_id?: string
+          provider_name?: string
+          provider_phone?: string
+          rating?: number | null
+          vehicle_type?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "transport_providers_provider_id_fkey"
+            columns: ["provider_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
