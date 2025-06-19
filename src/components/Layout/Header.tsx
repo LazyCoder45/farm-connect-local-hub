@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { useAuth } from '@/contexts/AuthContext';
-import { Sprout, User, LogOut, Settings } from 'lucide-react';
+import { Sprout, User, LogOut, Settings, Star } from 'lucide-react';
 
 const Header = () => {
   const { isAuthenticated, profile, logout } = useAuth();
@@ -24,6 +24,10 @@ const Header = () => {
     navigate('/settings');
   };
 
+  const handleTopFarmersClick = () => {
+    navigate('/top-farmers');
+  };
+
   return (
     <header className="bg-white shadow-sm border-b">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -39,6 +43,14 @@ const Header = () => {
             <Link to="/crops" className="text-gray-700 hover:text-farm-600 font-medium">
               Crops
             </Link>
+            <Button 
+              variant="ghost" 
+              onClick={handleTopFarmersClick}
+              className="text-gray-700 hover:text-farm-600 font-medium"
+            >
+              <Star className="mr-2 h-4 w-4" />
+              Top Farmers
+            </Button>
             <Link to="/transport" className="text-gray-700 hover:text-farm-600 font-medium">
               Transport
             </Link>

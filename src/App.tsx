@@ -15,6 +15,7 @@ import PostCrop from "@/pages/Crops/PostCrop";
 import Profile from "@/pages/Profile/Profile";
 import Settings from "@/pages/Settings/Settings";
 import TransportList from "@/pages/Transport/TransportList";
+import TopRatedFarmers from "@/pages/Farmers/TopRatedFarmers";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -37,6 +38,7 @@ const App = () => (
               <Route path="/profile" element={<Profile />} />
               <Route path="/settings" element={<Settings />} />
               <Route path="/transport" element={<TransportList />} />
+              <Route path="/top-farmers" element={<TopRatedFarmers />} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
             </Routes>

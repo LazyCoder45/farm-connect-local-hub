@@ -4,8 +4,9 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
-import { MapPin, Calendar, Weight, Star, Phone, ArrowLeft, ShoppingCart } from 'lucide-react';
+import { MapPin, Calendar, Weight, Star, Phone, ArrowLeft, ShoppingCart, Leaf } from 'lucide-react';
 import { useCrops } from '@/hooks/useCrops';
 import { useAuth } from '@/contexts/AuthContext';
 
@@ -92,7 +93,10 @@ const CropDetail = () => {
             <div className="flex items-center gap-2 mb-2">
               <h1 className="text-3xl font-bold text-farm-800">{crop.title}</h1>
               {crop.is_organic && (
-                <Badge className="bg-green-600">Organic</Badge>
+                <Badge className="bg-green-600">
+                  <Leaf className="h-3 w-3 mr-1" />
+                  Organic
+                </Badge>
               )}
             </div>
             <p className="text-muted-foreground">{crop.description}</p>
@@ -131,13 +135,14 @@ const CropDetail = () => {
             </CardHeader>
             <CardContent>
               <div className="flex items-center space-x-4">
-                <div className="w-12 h-12 bg-farm-100 rounded-full flex items-center justify-center">
-                  <span className="text-farm-600 font-semibold">
-                    {crop.profiles?.name?.charAt(0) || 'F'}
-                  </span>
-                </div>
+                <Avatar className="w-16 h-16">
+                  <AvatarImage src={crop.profiles?.profile_image || ''} alt={crop.profiles?.name} />
+                  <AvatarFallback className="text-lg">
+                    {crop.profiles?.name?.charAt(0).toUpperCase() || 'F'}
+                  </AvatarFallback>
+                </Avatar>
                 <div>
-                  <h3 className="font-semibold">{crop.profiles?.name || 'Unknown Farmer'}</h3>
+                  <h3 className="font-semibold text-lg">{crop.profiles?.name || 'Unknown Farmer'}</h3>
                   <p className="text-sm text-muted-foreground">
                     {crop.profiles?.district}, {crop.profiles?.upazila}
                   </p>
