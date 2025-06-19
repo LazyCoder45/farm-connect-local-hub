@@ -16,6 +16,7 @@ import Profile from "@/pages/Profile/Profile";
 import Settings from "@/pages/Settings/Settings";
 import TransportList from "@/pages/Transport/TransportList";
 import TopRatedFarmers from "@/pages/Farmers/TopRatedFarmers";
+import OrderList from "@/pages/Orders/OrderList";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -35,6 +36,7 @@ const App = () => (
               <Route path="/crops" element={<CropList />} />
               <Route path="/crops/:id" element={<CropDetail />} />
               <Route path="/post-crop" element={<PostCrop />} />
+              <Route path="/orders" element={<OrderList />} />
               <Route path="/profile" element={<Profile />} />
               <Route path="/settings" element={<Settings />} />
               <Route path="/transport" element={<TransportList />} />

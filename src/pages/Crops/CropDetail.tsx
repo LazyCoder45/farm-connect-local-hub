@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -9,12 +9,14 @@ import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious
 import { MapPin, Calendar, Weight, Star, Phone, ArrowLeft, ShoppingCart, Leaf } from 'lucide-react';
 import { useCrops } from '@/hooks/useCrops';
 import { useAuth } from '@/contexts/AuthContext';
+import OrderForm from '@/components/Orders/OrderForm';
 
 const CropDetail = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { isAuthenticated, profile } = useAuth();
   const { data: crops = [] } = useCrops();
+  const [showOrderForm, setShowOrderForm] = useState(false);
   
   const crop = crops.find(c => c.id === id);
 
@@ -34,9 +36,16 @@ const CropDetail = () => {
       navigate('/login');
       return;
     }
-    // TODO: Implement order functionality
-    alert('Order functionality will be implemented soon!');
+    
+    if (profile?.role !== 'consumer') {
+      alert('Only consumers can place orders.');
+      return;
+    }
+    
+    setShowOrderForm(true);
   };
+
+  const isOwnCrop = profile?.id === crop.farmer_id;
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -173,7 +182,7 @@ const CropDetail = () => {
               </Badge>
             </div>
             
-            {crop.status === 'available' && (
+            {crop.status === 'available' && !isOwnCrop && (
               <Button 
                 className="w-full bg-farm-600 hover:bg-farm-700" 
                 size="lg"
@@ -183,9 +192,23 @@ const CropDetail = () => {
                 Order Now
               </Button>
             )}
+            
+            {isOwnCrop && (
+              <div className="text-center py-4">
+                <p className="text-muted-foreground">This is your crop listing</p>
+              </div>
+            )}
           </div>
         </div>
       </div>
+
+      {/* Order Form Modal */}
+      {showOrderForm && (
+        <OrderForm
+          crop={crop}
+          onClose={() => setShowOrderForm(false)}
+        />
+      )}
     </div>
   );
 };

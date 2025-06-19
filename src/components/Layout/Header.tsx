@@ -5,70 +5,68 @@ import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { useAuth } from '@/contexts/AuthContext';
-import { Sprout, User, LogOut, Settings, Star } from 'lucide-react';
+import { Leaf, User, Settings, LogOut, Package, ShoppingCart, Star, Truck, List } from 'lucide-react';
 
 const Header = () => {
-  const { isAuthenticated, profile, logout } = useAuth();
+  const { isAuthenticated, profile, signOut } = useAuth();
   const navigate = useNavigate();
 
-  const handleLogout = async () => {
-    await logout();
+  const handleSignOut = async () => {
+    await signOut();
     navigate('/');
-  };
-
-  const handleProfileClick = () => {
-    navigate('/profile');
-  };
-
-  const handleSettingsClick = () => {
-    navigate('/settings');
-  };
-
-  const handleTopFarmersClick = () => {
-    navigate('/top-farmers');
   };
 
   return (
     <header className="bg-white shadow-sm border-b">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16">
+      <div className="container mx-auto px-4 py-4">
+        <div className="flex items-center justify-between">
           {/* Logo */}
           <Link to="/" className="flex items-center space-x-2">
-            <Sprout className="h-8 w-8 text-farm-600" />
-            <span className="text-xl font-bold text-farm-800">FarmConnect</span>
+            <Leaf className="h-8 w-8 text-farm-600" />
+            <span className="text-2xl font-bold text-farm-800">AgroConnect</span>
           </Link>
 
           {/* Navigation */}
-          <nav className="hidden md:flex items-center space-x-8">
-            <Link to="/crops" className="text-gray-700 hover:text-farm-600 font-medium">
-              Crops
+          <nav className="hidden md:flex items-center space-x-6">
+            <Link to="/crops" className="text-gray-700 hover:text-farm-600 transition-colors">
+              Browse Crops
             </Link>
             <Button 
               variant="ghost" 
-              onClick={handleTopFarmersClick}
-              className="text-gray-700 hover:text-farm-600 font-medium"
+              onClick={() => navigate('/top-farmers')}
+              className="text-gray-700 hover:text-farm-600"
             >
-              <Star className="mr-2 h-4 w-4" />
+              <Star className="h-4 w-4 mr-2" />
               Top Farmers
             </Button>
-            <Link to="/transport" className="text-gray-700 hover:text-farm-600 font-medium">
+            <Link to="/transport" className="text-gray-700 hover:text-farm-600 transition-colors">
+              <Truck className="h-4 w-4 mr-2 inline" />
               Transport
             </Link>
-            {isAuthenticated && profile?.role === 'farmer' && (
-              <Link to="/post-crop" className="text-gray-700 hover:text-farm-600 font-medium">
-                Post Crop
-              </Link>
+            {isAuthenticated && (
+              <>
+                <Link to="/orders" className="text-gray-700 hover:text-farm-600 transition-colors">
+                  <List className="h-4 w-4 mr-2 inline" />
+                  My Orders
+                </Link>
+                {profile?.role === 'farmer' && (
+                  <Link to="/post-crop" className="text-gray-700 hover:text-farm-600 transition-colors">
+                    <Package className="h-4 w-4 mr-2 inline" />
+                    Post Crop
+                  </Link>
+                )}
+              </>
             )}
           </nav>
 
-          {/* Auth Section */}
+          {/* User Menu */}
           <div className="flex items-center space-x-4">
             {isAuthenticated ? (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" className="relative h-8 w-8 rounded-full">
-                    <Avatar className="h-8 w-8">
-                      <AvatarImage src={profile?.profile_image} alt={profile?.name} />
+                  <Button variant="ghost" className="relative h-10 w-10 rounded-full">
+                    <Avatar className="h-10 w-10">
+                      <AvatarImage src={profile?.profile_image || ''} alt={profile?.name || ''} />
                       <AvatarFallback>
                         {profile?.name?.charAt(0).toUpperCase() || 'U'}
                       </AvatarFallback>
@@ -82,22 +80,37 @@ const Header = () => {
                       <p className="w-[200px] truncate text-sm text-muted-foreground">
                         {profile?.email}
                       </p>
-                      <p className="text-xs text-muted-foreground capitalize">
-                        {profile?.role}
-                      </p>
                     </div>
                   </div>
-                  <DropdownMenuItem className="cursor-pointer" onClick={handleProfileClick}>
-                    <User className="mr-2 h-4 w-4" />
-                    <span>Profile</span>
+                  <DropdownMenuItem asChild>
+                    <Link to="/profile" className="w-full">
+                      <User className="mr-2 h-4 w-4" />
+                      Profile
+                    </Link>
                   </DropdownMenuItem>
-                  <DropdownMenuItem className="cursor-pointer" onClick={handleSettingsClick}>
-                    <Settings className="mr-2 h-4 w-4" />
-                    <span>Settings</span>
+                  <DropdownMenuItem asChild>
+                    <Link to="/orders" className="w-full">
+                      <List className="mr-2 h-4 w-4" />
+                      My Orders
+                    </Link>
                   </DropdownMenuItem>
-                  <DropdownMenuItem className="cursor-pointer" onClick={handleLogout}>
+                  {profile?.role === 'farmer' && (
+                    <DropdownMenuItem asChild>
+                      <Link to="/post-crop" className="w-full">
+                        <Package className="mr-2 h-4 w-4" />
+                        Post Crop
+                      </Link>
+                    </DropdownMenuItem>
+                  )}
+                  <DropdownMenuItem asChild>
+                    <Link to="/settings" className="w-full">
+                      <Settings className="mr-2 h-4 w-4" />
+                      Settings
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={handleSignOut}>
                     <LogOut className="mr-2 h-4 w-4" />
-                    <span>Log out</span>
+                    Sign Out
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
@@ -106,8 +119,8 @@ const Header = () => {
                 <Button variant="ghost" asChild>
                   <Link to="/login">Sign In</Link>
                 </Button>
-                <Button asChild className="bg-farm-600 hover:bg-farm-700">
-                  <Link to="/register">Get Started</Link>
+                <Button asChild>
+                  <Link to="/register">Sign Up</Link>
                 </Button>
               </div>
             )}
