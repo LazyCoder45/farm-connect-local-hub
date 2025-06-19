@@ -5,89 +5,101 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
-import { MapPin, Calendar, Weight, Star, Search } from 'lucide-react';
-import { Crop } from '@/types/crop';
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
+import { MapPin, Calendar, Weight, Star, Search, User } from 'lucide-react';
+import { useCrops } from '@/hooks/useCrops';
+import { useNavigate } from 'react-router-dom';
 
 const CropList = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedDistrict, setSelectedDistrict] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('');
+  const navigate = useNavigate();
+  
+  const { data: crops = [], isLoading, error } = useCrops();
 
-  // Mock data - replace with actual API call
-  const mockCrops: Crop[] = [
-    {
-      id: '1',
-      farmerId: 'farmer1',
-      farmerName: 'Rahman Sheikh',
-      farmerLocation: {
-        district: 'Dinajpur',
-        upazila: 'Birganj',
-        union: 'Raniganj'
-      },
-      title: 'Premium Basmati Rice',
-      description: 'Organically grown aromatic basmati rice, ready for harvest in 2 weeks.',
-      quantity: 500,
-      unit: 'kg',
-      pricePerUnit: 65,
-      images: ['https://images.unsplash.com/photo-1618160702438-9b02ab6515c9?w=500'],
-      harvestDate: new Date('2024-01-15'),
-      expectedSaleDate: new Date('2024-01-20'),
-      category: 'Rice',
-      isOrganic: true,
-      status: 'available',
-      ratings: [{ userId: '1', userName: 'Test', rating: 5, createdAt: new Date() }],
-      comments: [],
-      createdAt: new Date(),
-      updatedAt: new Date()
-    },
-    {
-      id: '2',
-      farmerId: 'farmer2',
-      farmerName: 'Fatima Khatun',
-      farmerLocation: {
-        district: 'Jessore',
-        upazila: 'Sharsha',
-        union: 'Benapole'
-      },
-      title: 'Fresh Tomatoes',
-      description: 'Juicy red tomatoes, perfect for cooking and salads.',
-      quantity: 200,
-      unit: 'kg',
-      pricePerUnit: 45,
-      images: ['https://images.unsplash.com/photo-1465146344425-f00d5f5c8f07?w=500'],
-      harvestDate: new Date('2024-01-10'),
-      expectedSaleDate: new Date('2024-01-15'),
-      category: 'Vegetables',
-      isOrganic: false,
-      status: 'available',
-      ratings: [{ userId: '1', userName: 'Test', rating: 4, createdAt: new Date() }],
-      comments: [],
-      createdAt: new Date(),
-      updatedAt: new Date()
-    }
-  ];
-
-  const districts = ['All Districts', 'Dhaka', 'Chittagong', 'Dinajpur', 'Jessore', 'Rajshahi'];
+  const districts = ['All Districts', 'Dhaka', 'Chittagong', 'Dinajpur', 'Jessore', 'Rajshahi', 'Rangpur', 'Kushtia'];
   const categories = ['All Categories', 'Rice', 'Vegetables', 'Fruits', 'Pulses', 'Spices'];
 
-  const filteredCrops = mockCrops.filter(crop => {
+  const filteredCrops = crops.filter(crop => {
     const matchesSearch = crop.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         crop.farmerName.toLowerCase().includes(searchTerm.toLowerCase());
+                         crop.profiles?.name?.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesDistrict = !selectedDistrict || selectedDistrict === 'All Districts' || 
-                           crop.farmerLocation.district === selectedDistrict;
+                           crop.district === selectedDistrict;
     const matchesCategory = !selectedCategory || selectedCategory === 'All Categories' || 
                            crop.category === selectedCategory;
     
     return matchesSearch && matchesDistrict && matchesCategory;
   });
 
-  const getAverageRating = (ratings: any[]) => {
-    if (ratings.length === 0) return 0;
-    return ratings.reduce((sum, rating) => sum + rating.rating, 0) / ratings.length;
+  // Mock best farmers data - in real app, this would come from API
+  const bestFarmers = [
+    { id: '1', name: 'Rahman Sheikh', rating: 4.8, totalCrops: 25, location: 'Dinajpur', avatar: null },
+    { id: '2', name: 'Fatima Khatun', rating: 4.9, totalCrops: 18, location: 'Rangpur', avatar: null },
+    { id: '3', name: 'Karim Miah', rating: 4.7, totalCrops: 32, location: 'Kushtia', avatar: null },
+    { id: '4', name: 'Rashida Begum', rating: 4.6, totalCrops: 21, location: 'Jessore', avatar: null },
+  ];
+
+  const handleViewDetails = (cropId: string) => {
+    navigate(`/crops/${cropId}`);
   };
+
+  if (isLoading) {
+    return (
+      <div className="container mx-auto px-4 py-8">
+        <div className="text-center">Loading crops...</div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="container mx-auto px-4 py-8">
+        <div className="text-center text-red-500">Error loading crops. Please try again.</div>
+      </div>
+    );
+  }
 
   return (
     <div className="container mx-auto px-4 py-8">
+      {/* Best Farmers Section */}
+      <Card className="mb-8">
+        <CardHeader>
+          <CardTitle className="text-xl font-bold text-farm-800 flex items-center">
+            <Star className="mr-2 h-5 w-5 text-yellow-500" />
+            Top Rated Farmers
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <Carousel className="w-full">
+            <CarouselContent>
+              {bestFarmers.map((farmer) => (
+                <CarouselItem key={farmer.id} className="md:basis-1/2 lg:basis-1/4">
+                  <Card className="h-full">
+                    <CardContent className="p-4 text-center">
+                      <div className="w-16 h-16 bg-farm-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                        <User className="h-8 w-8 text-farm-600" />
+                      </div>
+                      <h3 className="font-semibold text-farm-800">{farmer.name}</h3>
+                      <p className="text-sm text-muted-foreground">{farmer.location}</p>
+                      <div className="flex items-center justify-center mt-2">
+                        <Star className="h-4 w-4 text-yellow-500 fill-current" />
+                        <span className="ml-1 text-sm font-medium">{farmer.rating}</span>
+                      </div>
+                      <p className="text-xs text-muted-foreground mt-1">
+                        {farmer.totalCrops} crops listed
+                      </p>
+                    </CardContent>
+                  </Card>
+                </CarouselItem>
+              ))}
+            </CarouselContent>
+            <CarouselPrevious />
+            <CarouselNext />
+          </Carousel>
+        </CardContent>
+      </Card>
+
       <div className="flex flex-col lg:flex-row gap-8">
         {/* Filters Sidebar */}
         <div className="lg:w-1/4 space-y-6">
@@ -152,11 +164,11 @@ const CropList = () => {
               <Card key={crop.id} className="overflow-hidden hover:shadow-lg transition-shadow">
                 <div className="aspect-video relative">
                   <img
-                    src={crop.images[0]}
+                    src={crop.images?.[0] || 'https://images.unsplash.com/photo-1586201375761-83865001e31c?w=500'}
                     alt={crop.title}
                     className="w-full h-full object-cover"
                   />
-                  {crop.isOrganic && (
+                  {crop.is_organic && (
                     <Badge className="absolute top-2 left-2 bg-green-600">
                       Organic
                     </Badge>
@@ -175,7 +187,7 @@ const CropList = () => {
                   <div className="space-y-2 mb-4">
                     <div className="flex items-center text-sm text-muted-foreground">
                       <MapPin className="h-4 w-4 mr-1" />
-                      {crop.farmerLocation.district}, {crop.farmerLocation.upazila}
+                      {crop.district}, {crop.upazila}
                     </div>
                     
                     <div className="flex items-center text-sm text-muted-foreground">
@@ -185,30 +197,28 @@ const CropList = () => {
                     
                     <div className="flex items-center text-sm text-muted-foreground">
                       <Calendar className="h-4 w-4 mr-1" />
-                      Available: {crop.expectedSaleDate.toLocaleDateString()}
-                    </div>
-                    
-                    <div className="flex items-center text-sm">
-                      <Star className="h-4 w-4 mr-1 text-yellow-500 fill-current" />
-                      {getAverageRating(crop.ratings).toFixed(1)} ({crop.ratings.length} reviews)
+                      Available: {new Date(crop.expected_sale_date).toLocaleDateString()}
                     </div>
                   </div>
                   
                   <div className="flex justify-between items-center">
                     <div>
                       <span className="text-2xl font-bold text-farm-600">
-                        ৳{crop.pricePerUnit}
+                        ৳{crop.price_per_unit}
                       </span>
                       <span className="text-sm text-muted-foreground">/{crop.unit}</span>
                     </div>
                     
-                    <Button className="bg-farm-600 hover:bg-farm-700">
+                    <Button 
+                      className="bg-farm-600 hover:bg-farm-700"
+                      onClick={() => handleViewDetails(crop.id)}
+                    >
                       View Details
                     </Button>
                   </div>
                   
                   <div className="mt-3 text-sm text-muted-foreground">
-                    By <span className="font-medium">{crop.farmerName}</span>
+                    By <span className="font-medium">{crop.profiles?.name || 'Unknown Farmer'}</span>
                   </div>
                 </CardContent>
               </Card>

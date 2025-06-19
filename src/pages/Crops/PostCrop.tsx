@@ -1,5 +1,4 @@
-
-import React from 'react';
+import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
@@ -13,10 +12,12 @@ import { Switch } from '@/components/ui/switch';
 import { useAuth } from '@/contexts/AuthContext';
 import { useCreateCrop } from '@/hooks/useCrops';
 import { useNavigate } from 'react-router-dom';
+import { Upload, X } from 'lucide-react';
+import { useToast } from '@/hooks/use-toast';
 
 const postCropSchema = z.object({
   title: z.string().min(1, 'Title is required'),
-  description: z.string().optional(),
+  description: z.string().min(1, 'Description is required'),
   quantity: z.number().min(1, 'Quantity must be at least 1'),
   unit: z.string().min(1, 'Unit is required'),
   price_per_unit: z.number().min(0.1, 'Price must be greater than 0'),
@@ -35,6 +36,8 @@ const PostCrop = () => {
   const { profile, isAuthenticated } = useAuth();
   const navigate = useNavigate();
   const createCropMutation = useCreateCrop();
+  const { toast } = useToast();
+  const [uploadedImages, setUploadedImages] = useState<string[]>([]);
 
   const form = useForm<PostCropFormData>({
     resolver: zodResolver(postCropSchema),
@@ -66,17 +69,56 @@ const PostCrop = () => {
     );
   }
 
+  const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const files = event.target.files;
+    if (files) {
+      Array.from(files).forEach(file => {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          if (e.target?.result) {
+            setUploadedImages(prev => [...prev, e.target!.result as string]);
+          }
+        };
+        reader.readAsDataURL(file);
+      });
+    }
+  };
+
+  const removeImage = (index: number) => {
+    setUploadedImages(prev => prev.filter((_, i) => i !== index));
+  };
+
   const onSubmit = async (data: PostCropFormData) => {
     try {
       await createCropMutation.mutateAsync({
-        ...data,
+        title: data.title,
+        description: data.description,
+        quantity: data.quantity,
+        unit: data.unit,
+        price_per_unit: data.price_per_unit,
+        category: data.category,
+        harvest_date: data.harvest_date,
+        expected_sale_date: data.expected_sale_date,
+        is_organic: data.is_organic,
+        district: data.district,
+        upazila: data.upazila,
+        union: data.union,
         status: 'available' as const,
-        images: null,
+        images: uploadedImages.length > 0 ? uploadedImages : null,
         videos: null,
+      });
+      toast({
+        title: "Success",
+        description: "Your crop has been posted successfully!",
       });
       navigate('/crops');
     } catch (error) {
       console.error('Error posting crop:', error);
+      toast({
+        title: "Error",
+        description: "Failed to post crop. Please try again.",
+        variant: "destructive",
+      });
     }
   };
 
@@ -127,6 +169,48 @@ const PostCrop = () => {
                   </FormItem>
                 )}
               />
+
+              {/* Image Upload Section */}
+              <div className="space-y-4">
+                <FormLabel>Crop Images</FormLabel>
+                <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
+                  <input
+                    type="file"
+                    accept="image/*"
+                    multiple
+                    onChange={handleImageUpload}
+                    className="hidden"
+                    id="image-upload"
+                  />
+                  <label htmlFor="image-upload" className="cursor-pointer">
+                    <Upload className="mx-auto h-12 w-12 text-gray-400" />
+                    <p className="mt-2 text-sm text-gray-600">
+                      Click to upload images or drag and drop
+                    </p>
+                  </label>
+                </div>
+                
+                {uploadedImages.length > 0 && (
+                  <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                    {uploadedImages.map((image, index) => (
+                      <div key={index} className="relative">
+                        <img
+                          src={image}
+                          alt={`Crop image ${index + 1}`}
+                          className="w-full h-24 object-cover rounded-lg"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => removeImage(index)}
+                          className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1 hover:bg-red-600"
+                        >
+                          <X className="h-3 w-3" />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <FormField
