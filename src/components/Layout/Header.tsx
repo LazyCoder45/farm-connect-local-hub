@@ -16,6 +16,10 @@ const Header = () => {
     navigate('/');
   };
 
+  const handleProfileClick = () => {
+    navigate('/profile');
+  };
+
   return (
     <header className="bg-white shadow-sm border-b">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -34,6 +38,11 @@ const Header = () => {
             <Link to="/transport" className="text-gray-700 hover:text-farm-600 font-medium">
               Transport
             </Link>
+            {isAuthenticated && profile?.role === 'farmer' && (
+              <Link to="/post-crop" className="text-gray-700 hover:text-farm-600 font-medium">
+                Post Crop
+              </Link>
+            )}
           </nav>
 
           {/* Auth Section */}
@@ -62,7 +71,7 @@ const Header = () => {
                       </p>
                     </div>
                   </div>
-                  <DropdownMenuItem className="cursor-pointer">
+                  <DropdownMenuItem className="cursor-pointer" onClick={handleProfileClick}>
                     <User className="mr-2 h-4 w-4" />
                     <span>Profile</span>
                   </DropdownMenuItem>

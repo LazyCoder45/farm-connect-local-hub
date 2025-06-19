@@ -10,6 +10,8 @@ import Home from "@/pages/Home";
 import Login from "@/pages/Auth/Login";
 import Register from "@/pages/Auth/Register";
 import CropList from "@/pages/Crops/CropList";
+import PostCrop from "@/pages/Crops/PostCrop";
+import Profile from "@/pages/Profile/Profile";
 import TransportList from "@/pages/Transport/TransportList";
 import NotFound from "./pages/NotFound";
 
@@ -28,6 +30,8 @@ const App = () => (
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
               <Route path="/crops" element={<CropList />} />
+              <Route path="/post-crop" element={<PostCrop />} />
+              <Route path="/profile" element={<Profile />} />
               <Route path="/transport" element={<TransportList />} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
