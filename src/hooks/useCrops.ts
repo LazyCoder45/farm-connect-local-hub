@@ -30,6 +30,7 @@ export interface Crop {
     district: string;
     upazila: string;
     union: string;
+    profile_image: string | null;
   };
 }
 
@@ -46,7 +47,8 @@ export const useCrops = () => {
             phone,
             district,
             upazila,
-            union
+            union,
+            profile_image
           )
         `)
         .eq('status', 'available')
