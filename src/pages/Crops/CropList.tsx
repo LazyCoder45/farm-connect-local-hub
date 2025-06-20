@@ -11,11 +11,13 @@ import { useCrops } from '@/hooks/useCrops';
 import { useNavigate } from 'react-router-dom';
 import NearbyCrops from '@/components/NearbyCrops';
 import { useAuth } from '@/contexts/AuthContext';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 const CropList = () => {
   const { data: crops = [], isLoading } = useCrops();
   const navigate = useNavigate();
   const { isAuthenticated } = useAuth();
+  const { t } = useLanguage();
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [selectedDistrict, setSelectedDistrict] = useState('all');
@@ -37,7 +39,7 @@ const CropList = () => {
   if (isLoading) {
     return (
       <div className="container mx-auto px-4 py-8">
-        <div className="text-center">Loading crops...</div>
+        <div className="text-center">{t('common.loading')}</div>
       </div>
     );
   }
@@ -53,13 +55,13 @@ const CropList = () => {
 
       {/* Search and Filters */}
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-farm-800 mb-6">Available Crops</h1>
+        <h1 className="text-3xl font-bold text-farm-800 mb-6">{t('crops.title')}</h1>
         
         <div className="flex flex-col md:flex-row gap-4 mb-6">
           <div className="relative flex-1">
             <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
             <Input
-              placeholder="Search crops..."
+              placeholder={t('crops.searchPlaceholder')}
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="pl-9"
@@ -68,10 +70,10 @@ const CropList = () => {
           
           <Select value={selectedCategory} onValueChange={setSelectedCategory}>
             <SelectTrigger className="w-full md:w-48">
-              <SelectValue placeholder="Category" />
+              <SelectValue placeholder={t('common.filter')} />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="all">All Categories</SelectItem>
+              <SelectItem value="all">{t('crops.allCategories')}</SelectItem>
               {categories.map(category => (
                 <SelectItem key={category} value={category}>{category}</SelectItem>
               ))}
@@ -80,10 +82,10 @@ const CropList = () => {
           
           <Select value={selectedDistrict} onValueChange={setSelectedDistrict}>
             <SelectTrigger className="w-full md:w-48">
-              <SelectValue placeholder="District" />
+              <SelectValue placeholder={t('auth.register.district')} />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="all">All Districts</SelectItem>
+              <SelectItem value="all">{t('crops.allDistricts')}</SelectItem>
               {districts.map(district => (
                 <SelectItem key={district} value={district}>{district}</SelectItem>
               ))}
@@ -102,7 +104,7 @@ const CropList = () => {
                 {crop.is_organic && (
                   <Badge className="bg-green-600">
                     <Leaf className="h-3 w-3 mr-1" />
-                    Organic
+                    {t('common.organic')}
                   </Badge>
                 )}
               </div>
@@ -135,7 +137,7 @@ const CropList = () => {
               <div className="space-y-2">
                 <div className="flex items-center">
                   <Weight className="h-4 w-4 mr-2 text-muted-foreground" />
-                  <span className="text-sm">{crop.quantity} {crop.unit} available</span>
+                  <span className="text-sm">{crop.quantity} {crop.unit} {t('common.available')}</span>
                 </div>
                 <div className="flex items-center">
                   <MapPin className="h-4 w-4 mr-2 text-muted-foreground" />
@@ -143,7 +145,7 @@ const CropList = () => {
                 </div>
                 <div className="flex items-center">
                   <Calendar className="h-4 w-4 mr-2 text-muted-foreground" />
-                  <span className="text-sm">Until {new Date(crop.expected_sale_date).toLocaleDateString()}</span>
+                  <span className="text-sm">{t('common.until')} {new Date(crop.expected_sale_date).toLocaleDateString()}</span>
                 </div>
               </div>
 
@@ -158,7 +160,7 @@ const CropList = () => {
                   onClick={() => navigate(`/crops/${crop.id}`)}
                 >
                   <Eye className="h-4 w-4 mr-2" />
-                  View Details
+                  {t('common.viewDetails')}
                 </Button>
               </div>
 
@@ -171,8 +173,8 @@ const CropList = () => {
 
       {filteredCrops.length === 0 && (
         <div className="text-center py-12">
-          <h3 className="text-lg font-semibold mb-2">No crops found</h3>
-          <p className="text-muted-foreground">Try adjusting your search or filter criteria.</p>
+          <h3 className="text-lg font-semibold mb-2">{t('crops.noCropsFound')}</h3>
+          <p className="text-muted-foreground">{t('crops.adjustFilters')}</p>
         </div>
       )}
     </div>

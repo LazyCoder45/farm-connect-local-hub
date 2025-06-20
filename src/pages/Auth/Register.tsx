@@ -7,7 +7,9 @@ import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useAuth } from '@/contexts/AuthContext';
+import { useLanguage } from '@/contexts/LanguageContext';
 import { Sprout } from 'lucide-react';
+import LanguageSelector from '@/components/LanguageSelector';
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -22,6 +24,7 @@ const Register = () => {
   });
   const [isLoading, setIsLoading] = useState(false);
   const { register, isAuthenticated } = useAuth();
+  const { t } = useLanguage();
   const navigate = useNavigate();
 
   const districts = ['Dhaka', 'Chittagong', 'Rajshahi', 'Khulna', 'Barisal', 'Sylhet', 'Rangpur', 'Mymensingh'];
@@ -64,53 +67,57 @@ const Register = () => {
     <div className="min-h-screen flex items-center justify-center gradient-bg farm-pattern py-12">
       <Card className="w-full max-w-md">
         <CardHeader className="text-center">
-          <div className="flex justify-center mb-4">
+          <div className="flex justify-between items-center mb-4">
+            <div className="flex-1" />
             <Sprout className="h-12 w-12 text-farm-600" />
+            <div className="flex-1 flex justify-end">
+              <LanguageSelector />
+            </div>
           </div>
-          <CardTitle className="text-2xl font-bold text-farm-800">Join FarmConnect</CardTitle>
+          <CardTitle className="text-2xl font-bold text-farm-800">{t('auth.register.title')}</CardTitle>
           <CardDescription>
-            Create your account and start connecting
+            {t('auth.register.subtitle')}
           </CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="name">Full Name</Label>
+              <Label htmlFor="name">{t('auth.register.fullName')}</Label>
               <Input
                 id="name"
                 value={formData.name}
                 onChange={(e) => handleInputChange('name', e.target.value)}
-                placeholder="Enter your full name"
+                placeholder={t('auth.register.fullName')}
                 required
               />
             </div>
             
             <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
+              <Label htmlFor="email">{t('auth.login.email')}</Label>
               <Input
                 id="email"
                 type="email"
                 value={formData.email}
                 onChange={(e) => handleInputChange('email', e.target.value)}
-                placeholder="Enter your email"
+                placeholder={t('auth.login.email')}
                 required
               />
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="password">Password</Label>
+              <Label htmlFor="password">{t('auth.login.password')}</Label>
               <Input
                 id="password"
                 type="password"
                 value={formData.password}
                 onChange={(e) => handleInputChange('password', e.target.value)}
-                placeholder="Create a password"
+                placeholder={t('auth.login.password')}
                 required
               />
             </div>
             
             <div className="space-y-2">
-              <Label htmlFor="phone">Phone Number</Label>
+              <Label htmlFor="phone">{t('auth.register.phone')}</Label>
               <Input
                 id="phone"
                 value={formData.phone}
@@ -121,23 +128,23 @@ const Register = () => {
             </div>
             
             <div className="space-y-2">
-              <Label htmlFor="role">I am a</Label>
+              <Label htmlFor="role">{t('auth.register.role')}</Label>
               <Select value={formData.role} onValueChange={(value: 'farmer' | 'consumer') => handleInputChange('role', value)}>
                 <SelectTrigger>
-                  <SelectValue placeholder="Select your role" />
+                  <SelectValue placeholder={t('auth.register.role')} />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="farmer">Farmer</SelectItem>
-                  <SelectItem value="consumer">Consumer</SelectItem>
+                  <SelectItem value="farmer">{t('auth.register.farmer')}</SelectItem>
+                  <SelectItem value="consumer">{t('auth.register.consumer')}</SelectItem>
                 </SelectContent>
               </Select>
             </div>
             
             <div className="space-y-2">
-              <Label htmlFor="district">District</Label>
+              <Label htmlFor="district">{t('auth.register.district')}</Label>
               <Select value={formData.district} onValueChange={(value) => handleInputChange('district', value)}>
                 <SelectTrigger>
-                  <SelectValue placeholder="Select district" />
+                  <SelectValue placeholder={t('auth.register.district')} />
                 </SelectTrigger>
                 <SelectContent>
                   {districts.map(district => (
@@ -148,10 +155,10 @@ const Register = () => {
             </div>
             
             <div className="space-y-2">
-              <Label htmlFor="upazila">Upazila</Label>
+              <Label htmlFor="upazila">{t('auth.register.upazila')}</Label>
               <Select value={formData.upazila} onValueChange={(value) => handleInputChange('upazila', value)}>
                 <SelectTrigger>
-                  <SelectValue placeholder="Select upazila" />
+                  <SelectValue placeholder={t('auth.register.upazila')} />
                 </SelectTrigger>
                 <SelectContent>
                   {upazilas.map(upazila => (
@@ -162,10 +169,10 @@ const Register = () => {
             </div>
             
             <div className="space-y-2">
-              <Label htmlFor="union">Union</Label>
+              <Label htmlFor="union">{t('auth.register.union')}</Label>
               <Select value={formData.union} onValueChange={(value) => handleInputChange('union', value)}>
                 <SelectTrigger>
-                  <SelectValue placeholder="Select union" />
+                  <SelectValue placeholder={t('auth.register.union')} />
                 </SelectTrigger>
                 <SelectContent>
                   {unions.map(union => (
@@ -180,15 +187,15 @@ const Register = () => {
               className="w-full bg-farm-600 hover:bg-farm-700"
               disabled={isLoading}
             >
-              {isLoading ? 'Creating Account...' : 'Create Account'}
+              {isLoading ? t('auth.register.creatingAccount') : t('auth.register.createAccount')}
             </Button>
           </form>
           
           <div className="mt-6 text-center">
             <p className="text-sm text-muted-foreground">
-              Already have an account?{' '}
+              {t('auth.register.haveAccount')}{' '}
               <Link to="/login" className="text-farm-600 hover:text-farm-700 font-medium">
-                Sign in here
+                {t('auth.register.signInHere')}
               </Link>
             </p>
           </div>

@@ -5,9 +5,12 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Link } from 'react-router-dom';
 import { Sprout, Users, Truck, Shield, TrendingUp, Heart, ArrowRight, Leaf, MapPin } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 const Home = () => {
-  const { isAuthenticated, profile } = useAuth();
+  const { isAuthent
+ated, profile } = useAuth();
+  const { t } = useLanguage();
 
   return (
     <div className="min-h-screen">
@@ -17,26 +20,25 @@ const Home = () => {
         <div className="relative container mx-auto px-4 py-20">
           <div className="max-w-4xl mx-auto text-center">
             <h1 className="text-5xl md:text-6xl font-bold mb-6 leading-tight">
-              Connect with 
-              <span className="text-farm-200"> Local Farmers</span>
+              {t('home.hero.title')}
             </h1>
             <p className="text-xl md:text-2xl mb-8 text-farm-100 leading-relaxed">
-              Fresh crops, fair prices, and direct connections between farmers and consumers
+              {t('home.hero.subtitle')}
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               {!isAuthenticated ? (
                 <>
                   <Button asChild size="lg" className="bg-white text-farm-600 hover:bg-farm-50 text-lg px-8 py-3">
-                    <Link to="/register">Get Started Today</Link>
+                    <Link to="/register">{t('home.hero.getStarted')}</Link>
                   </Button>
                   <Button asChild variant="outline" size="lg" className="border-white text-white hover:bg-white hover:text-farm-600 text-lg px-8 py-3">
-                    <Link to="/crops">Browse Crops</Link>
+                    <Link to="/crops">{t('home.hero.browseCrops')}</Link>
                   </Button>
                 </>
               ) : (
                 <Button asChild size="lg" className="bg-white text-farm-600 hover:bg-farm-50 text-lg px-8 py-3">
                   <Link to="/crops">
-                    Explore Fresh Crops
+                    {t('home.hero.exploreCrops')}
                     <ArrowRight className="ml-2 h-5 w-5" />
                   </Link>
                 </Button>
@@ -58,9 +60,9 @@ const Home = () => {
       <section className="py-20 bg-gradient-to-b from-white to-farm-50">
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-farm-800 mb-4">Why Choose FarmConnect?</h2>
+            <h2 className="text-4xl font-bold text-farm-800 mb-4">{t('home.features.title')}</h2>
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-              We're revolutionizing how farmers and consumers connect, creating a sustainable marketplace for everyone
+              {t('home.features.subtitle')}
             </p>
           </div>
           
@@ -70,11 +72,11 @@ const Home = () => {
                 <div className="w-16 h-16 bg-farm-100 rounded-full flex items-center justify-center mx-auto mb-4">
                   <Sprout className="h-8 w-8 text-farm-600" />
                 </div>
-                <CardTitle className="text-xl text-farm-800">Fresh & Local</CardTitle>
+                <CardTitle className="text-xl text-farm-800">{t('home.feature.fresh.title')}</CardTitle>
               </CardHeader>
               <CardContent>
                 <p className="text-muted-foreground text-center">
-                  Get the freshest produce directly from local farmers in your area, ensuring quality and supporting your community.
+                  {t('home.feature.fresh.desc')}
                 </p>
               </CardContent>
             </Card>
@@ -84,11 +86,11 @@ const Home = () => {
                 <div className="w-16 h-16 bg-farm-100 rounded-full flex items-center justify-center mx-auto mb-4">
                   <Users className="h-8 w-8 text-farm-600" />
                 </div>
-                <CardTitle className="text-xl text-farm-800">Direct Connection</CardTitle>
+                <CardTitle className="text-xl text-farm-800">{t('home.feature.direct.title')}</CardTitle>
               </CardHeader>
               <CardContent>
                 <p className="text-muted-foreground text-center">
-                  Connect directly with farmers, eliminate middlemen, and ensure fair prices for both buyers and sellers.
+                  {t('home.feature.direct.desc')}
                 </p>
               </CardContent>
             </Card>
@@ -98,11 +100,11 @@ const Home = () => {
                 <div className="w-16 h-16 bg-farm-100 rounded-full flex items-center justify-center mx-auto mb-4">
                   <MapPin className="h-8 w-8 text-farm-600" />
                 </div>
-                <CardTitle className="text-xl text-farm-800">Neighbor Crops</CardTitle>
+                <CardTitle className="text-xl text-farm-800">{t('home.feature.neighbor.title')}</CardTitle>
               </CardHeader>
               <CardContent>
                 <p className="text-muted-foreground text-center">
-                  Discover fresh produce from farmers in your neighborhood with our location-based crop recommendations.
+                  {t('home.feature.neighbor.desc')}
                 </p>
               </CardContent>
             </Card>
@@ -112,11 +114,11 @@ const Home = () => {
                 <div className="w-16 h-16 bg-farm-100 rounded-full flex items-center justify-center mx-auto mb-4">
                   <Truck className="h-8 w-8 text-farm-600" />
                 </div>
-                <CardTitle className="text-xl text-farm-800">Easy Transport</CardTitle>
+                <CardTitle className="text-xl text-farm-800">{t('home.feature.transport.title')}</CardTitle>
               </CardHeader>
               <CardContent>
                 <p className="text-muted-foreground text-center">
-                  Find reliable transport services to get your crops from farm to table efficiently and safely.
+                  {t('home.feature.transport.desc')}
                 </p>
               </CardContent>
             </Card>
@@ -126,11 +128,11 @@ const Home = () => {
                 <div className="w-16 h-16 bg-farm-100 rounded-full flex items-center justify-center mx-auto mb-4">
                   <Shield className="h-8 w-8 text-farm-600" />
                 </div>
-                <CardTitle className="text-xl text-farm-800">Trusted Platform</CardTitle>
+                <CardTitle className="text-xl text-farm-800">{t('home.feature.trusted.title')}</CardTitle>
               </CardHeader>
               <CardContent>
                 <p className="text-muted-foreground text-center">
-                  Our verified farmer network and customer rating system ensures you're dealing with trusted partners.
+                  {t('home.feature.trusted.desc')}
                 </p>
               </CardContent>
             </Card>
@@ -140,11 +142,11 @@ const Home = () => {
                 <div className="w-16 h-16 bg-farm-100 rounded-full flex items-center justify-center mx-auto mb-4">
                   <Heart className="h-8 w-8 text-farm-600" />
                 </div>
-                <CardTitle className="text-xl text-farm-800">Community First</CardTitle>
+                <CardTitle className="text-xl text-farm-800">{t('home.feature.community.title')}</CardTitle>
               </CardHeader>
               <CardContent>
                 <p className="text-muted-foreground text-center">
-                  Support local agriculture, reduce environmental impact, and strengthen community bonds through direct trade.
+                  {t('home.feature.community.desc')}
                 </p>
               </CardContent>
             </Card>
@@ -158,15 +160,15 @@ const Home = () => {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
             <div>
               <div className="text-4xl md:text-5xl font-bold mb-2">500+</div>
-              <div className="text-farm-200 text-lg">Active Farmers</div>
+              <div className="text-farm-200 text-lg">{t('home.stats.farmers')}</div>
             </div>
             <div>
               <div className="text-4xl md:text-5xl font-bold mb-2">10K+</div>
-              <div className="text-farm-200 text-lg">Happy Customers</div>
+              <div className="text-farm-200 text-lg">{t('home.stats.customers')}</div>
             </div>
             <div>
               <div className="text-4xl md:text-5xl font-bold mb-2">50+</div>
-              <div className="text-farm-200 text-lg">Districts Covered</div>
+              <div className="text-farm-200 text-lg">{t('home.stats.districts')}</div>
             </div>
           </div>
         </div>
@@ -175,30 +177,30 @@ const Home = () => {
       {/* CTA Section */}
       <section className="py-20 bg-gradient-to-r from-farm-50 to-green-50">
         <div className="container mx-auto px-4 text-center">
-          <h2 className="text-4xl font-bold text-farm-800 mb-6">Ready to Get Started?</h2>
+          <h2 className="text-4xl font-bold text-farm-800 mb-6">{t('home.cta.title')}</h2>
           <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
-            Join thousands of farmers and consumers who are already benefiting from our platform
+            {t('home.cta.subtitle')}
           </p>
           
           {!isAuthenticated ? (
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button asChild size="lg" className="bg-farm-600 hover:bg-farm-700 text-lg px-8 py-3">
-                <Link to="/register">Join as Farmer</Link>
+                <Link to="/register">{t('home.cta.joinFarmer')}</Link>
               </Button>
               <Button asChild variant="outline" size="lg" className="border-farm-600 text-farm-600 hover:bg-farm-600 hover:text-white text-lg px-8 py-3">
-                <Link to="/register">Join as Consumer</Link>
+                <Link to="/register">{t('home.cta.joinConsumer')}</Link>
               </Button>
             </div>
           ) : (
             <div className="space-y-4">
-              <p className="text-lg text-farm-600">Welcome back, {profile?.name}!</p>
+              <p className="text-lg text-farm-600">{t('home.cta.welcomeBack')} {profile?.name}!</p>
               {profile?.role === 'farmer' ? (
                 <Button asChild size="lg" className="bg-farm-600 hover:bg-farm-700 text-lg px-8 py-3">
-                  <Link to="/post-crop">Post Your Crops</Link>
+                  <Link to="/post-crop">{t('home.cta.postCrops')}</Link>
                 </Button>
               ) : (
                 <Button asChild size="lg" className="bg-farm-600 hover:bg-farm-700 text-lg px-8 py-3">
-                  <Link to="/crops">Browse Fresh Crops</Link>
+                  <Link to="/crops">{t('home.cta.browseFreshCrops')}</Link>
                 </Button>
               )}
             </div>
