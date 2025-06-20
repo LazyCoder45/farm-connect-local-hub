@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -8,8 +7,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useLanguage } from '@/contexts/LanguageContext';
 
 const Home = () => {
-  const { isAuthent
-ated, profile } = useAuth();
+  const { isAuthenticated, profile } = useAuth();
   const { t } = useLanguage();
 
   return (
