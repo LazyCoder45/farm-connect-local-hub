@@ -1,4 +1,3 @@
-
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
@@ -29,11 +28,13 @@ export interface Order {
     name: string;
     phone: string;
     district: string;
+    profile_image?: string;
   };
   farmer_profile?: {
     name: string;
     phone: string;
     district: string;
+    profile_image?: string;
   };
 }
 
@@ -58,12 +59,14 @@ export const useOrders = () => {
           consumer_profile:profiles!orders_consumer_id_fkey (
             name,
             phone,
-            district
+            district,
+            profile_image
           ),
           farmer_profile:profiles!orders_farmer_id_fkey (
             name,
             phone,
-            district
+            district,
+            profile_image
           )
         `)
         .or(`consumer_id.eq.${user.id},farmer_id.eq.${user.id}`)

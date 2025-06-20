@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -8,11 +7,11 @@ import { useAuth } from '@/contexts/AuthContext';
 import { Leaf, User, Settings, LogOut, Package, ShoppingCart, Star, Truck, List } from 'lucide-react';
 
 const Header = () => {
-  const { isAuthenticated, profile, signOut } = useAuth();
+  const { isAuthenticated, profile, logout } = useAuth();
   const navigate = useNavigate();
 
   const handleSignOut = async () => {
-    await signOut();
+    await logout();
     navigate('/');
   };
 
