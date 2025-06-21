@@ -1,3 +1,4 @@
+
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -23,6 +24,10 @@ import CropGuide from "@/pages/Farmer/CropGuide";
 import FarmingTips from "@/pages/Farmer/FarmingTips";
 import NutritionalInfo from "@/pages/Consumer/NutritionalInfo";
 import CropCalendar from "@/pages/Consumer/CropCalendar";
+import ForumHome from "@/pages/Forum/ForumHome";
+import ForumCategory from "@/pages/Forum/ForumCategory";
+import ForumPost from "@/pages/Forum/ForumPost";
+import CreateForumPost from "@/pages/Forum/CreateForumPost";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -54,6 +59,10 @@ const App = () => (
                 <Route path="/farmer/tips" element={<FarmingTips />} />
                 <Route path="/consumer/nutrition" element={<NutritionalInfo />} />
                 <Route path="/consumer/calendar" element={<CropCalendar />} />
+                <Route path="/forum" element={<ForumHome />} />
+                <Route path="/forum/category/:categoryId" element={<ForumCategory />} />
+                <Route path="/forum/post/:postId" element={<ForumPost />} />
+                <Route path="/forum/create-post" element={<CreateForumPost />} />
                 {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                 <Route path="*" element={<NotFound />} />
               </Routes>

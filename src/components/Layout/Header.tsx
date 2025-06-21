@@ -31,6 +31,10 @@ const Header = () => {
             <Link to="/crops" className="text-gray-700 hover:text-farm-600 transition-colors">
               Browse Crops
             </Link>
+            <Link to="/forum" className="text-gray-700 hover:text-farm-600 transition-colors">
+              <MessageSquare className="h-4 w-4 mr-2 inline" />
+              Forum
+            </Link>
             <Button 
               variant="ghost" 
               onClick={() => navigate('/top-farmers')}
@@ -106,6 +110,12 @@ const Header = () => {
                     <Link to="/orders" className="w-full">
                       <List className="mr-2 h-4 w-4" />
                       My Orders
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link to="/forum" className="w-full">
+                      <MessageSquare className="mr-2 h-4 w-4" />
+                      Community Forum
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild>

@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -10,6 +9,8 @@ import { MapPin, Calendar, Weight, Star, Phone, ArrowLeft, ShoppingCart, Leaf } 
 import { useCrops } from '@/hooks/useCrops';
 import { useAuth } from '@/contexts/AuthContext';
 import OrderForm from '@/components/Orders/OrderForm';
+import ReviewForm from '@/components/Reviews/ReviewForm';
+import ReviewList from '@/components/Reviews/ReviewList';
 
 const CropDetail = () => {
   const { id } = useParams<{ id: string }>();
@@ -58,7 +59,7 @@ const CropDetail = () => {
         Back to Crops
       </Button>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
         {/* Image Gallery */}
         <div>
           <Carousel className="w-full">
@@ -183,14 +184,17 @@ const CropDetail = () => {
             </div>
             
             {crop.status === 'available' && !isOwnCrop && (
-              <Button 
-                className="w-full bg-farm-600 hover:bg-farm-700" 
-                size="lg"
-                onClick={handleOrderNow}
-              >
-                <ShoppingCart className="mr-2 h-5 w-5" />
-                Order Now
-              </Button>
+              <div className="space-y-3">
+                <Button 
+                  className="w-full bg-farm-600 hover:bg-farm-700" 
+                  size="lg"
+                  onClick={handleOrderNow}
+                >
+                  <ShoppingCart className="mr-2 h-5 w-5" />
+                  Order Now
+                </Button>
+                <ReviewForm cropId={crop.id} cropTitle={crop.title} />
+              </div>
             )}
             
             {isOwnCrop && (
@@ -201,6 +205,9 @@ const CropDetail = () => {
           </div>
         </div>
       </div>
+
+      {/* Reviews Section */}
+      <ReviewList cropId={crop.id} />
 
       {/* Order Form Modal */}
       {showOrderForm && (
