@@ -1,10 +1,11 @@
+
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { useAuth } from '@/contexts/AuthContext';
-import { Leaf, User, Settings, LogOut, Package, ShoppingCart, Star, Truck, List } from 'lucide-react';
+import { Leaf, User, Settings, LogOut, Package, ShoppingCart, Star, Truck, List, BarChart3 } from 'lucide-react';
 
 const Header = () => {
   const { isAuthenticated, profile, logout } = useAuth();
@@ -49,10 +50,16 @@ const Header = () => {
                   My Orders
                 </Link>
                 {profile?.role === 'farmer' && (
-                  <Link to="/post-crop" className="text-gray-700 hover:text-farm-600 transition-colors">
-                    <Package className="h-4 w-4 mr-2 inline" />
-                    Post Crop
-                  </Link>
+                  <>
+                    <Link to="/post-crop" className="text-gray-700 hover:text-farm-600 transition-colors">
+                      <Package className="h-4 w-4 mr-2 inline" />
+                      Post Crop
+                    </Link>
+                    <Link to="/farmer/dashboard" className="text-gray-700 hover:text-farm-600 transition-colors">
+                      <BarChart3 className="h-4 w-4 mr-2 inline" />
+                      Farmer Tools
+                    </Link>
+                  </>
                 )}
               </>
             )}
@@ -94,12 +101,20 @@ const Header = () => {
                     </Link>
                   </DropdownMenuItem>
                   {profile?.role === 'farmer' && (
-                    <DropdownMenuItem asChild>
-                      <Link to="/post-crop" className="w-full">
-                        <Package className="mr-2 h-4 w-4" />
-                        Post Crop
-                      </Link>
-                    </DropdownMenuItem>
+                    <>
+                      <DropdownMenuItem asChild>
+                        <Link to="/post-crop" className="w-full">
+                          <Package className="mr-2 h-4 w-4" />
+                          Post Crop
+                        </Link>
+                      </DropdownMenuItem>
+                      <DropdownMenuItem asChild>
+                        <Link to="/farmer/dashboard" className="w-full">
+                          <BarChart3 className="mr-2 h-4 w-4" />
+                          Farmer Dashboard
+                        </Link>
+                      </DropdownMenuItem>
+                    </>
                   )}
                   <DropdownMenuItem asChild>
                     <Link to="/settings" className="w-full">
