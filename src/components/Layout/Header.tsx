@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { useAuth } from '@/contexts/AuthContext';
-import { Leaf, User, Settings, LogOut, Package, ShoppingCart, Star, Truck, List, BarChart3 } from 'lucide-react';
+import { Leaf, User, Settings, LogOut, Package, ShoppingCart, Star, Truck, List, BarChart3, Heart, Calendar } from 'lucide-react';
 
 const Header = () => {
   const { isAuthenticated, profile, logout } = useAuth();
@@ -42,6 +42,14 @@ const Header = () => {
             <Link to="/transport" className="text-gray-700 hover:text-farm-600 transition-colors">
               <Truck className="h-4 w-4 mr-2 inline" />
               Transport
+            </Link>
+            <Link to="/consumer/nutrition" className="text-gray-700 hover:text-farm-600 transition-colors">
+              <Heart className="h-4 w-4 mr-2 inline" />
+              Nutrition
+            </Link>
+            <Link to="/consumer/calendar" className="text-gray-700 hover:text-farm-600 transition-colors">
+              <Calendar className="h-4 w-4 mr-2 inline" />
+              Crop Calendar
             </Link>
             {isAuthenticated && (
               <>
@@ -98,6 +106,18 @@ const Header = () => {
                     <Link to="/orders" className="w-full">
                       <List className="mr-2 h-4 w-4" />
                       My Orders
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link to="/consumer/nutrition" className="w-full">
+                      <Heart className="mr-2 h-4 w-4" />
+                      Nutrition Info
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link to="/consumer/calendar" className="w-full">
+                      <Calendar className="mr-2 h-4 w-4" />
+                      Crop Calendar
                     </Link>
                   </DropdownMenuItem>
                   {profile?.role === 'farmer' && (
