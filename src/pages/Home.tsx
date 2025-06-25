@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -29,7 +30,7 @@ const Home = () => {
                   <Button asChild size="lg" className="bg-white text-farm-600 hover:bg-farm-50 text-lg px-8 py-3">
                     <Link to="/register">{t('home.hero.getStarted')}</Link>
                   </Button>
-                  <Button asChild variant="outline" size="lg" className="border-white text-white hover:bg-white hover:text-farm-600 text-lg px-8 py-3">
+                  <Button asChild variant="outline" size="lg" className="border-2 border-white text-white bg-transparent hover:bg-white hover:text-farm-600 text-lg px-8 py-3">
                     <Link to="/crops">{t('home.hero.browseCrops')}</Link>
                   </Button>
                 </>
