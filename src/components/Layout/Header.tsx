@@ -1,11 +1,10 @@
-
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { useAuth } from '@/contexts/AuthContext';
-import { Leaf, User, Settings, LogOut, Package, ShoppingCart, Star, Truck, List, BarChart3, Heart, Calendar } from 'lucide-react';
+import { Leaf, User, Settings, LogOut, Package, ShoppingCart, Star, Truck, List, BarChart3, Heart, Calendar, MessageSquare } from 'lucide-react';
 
 const Header = () => {
   const { isAuthenticated, profile, logout } = useAuth();
